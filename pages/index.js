@@ -1,7 +1,7 @@
 import Head from 'next/head'
-import { BsFillMoonStarsFill } from 'react-icons/bs'
+import { BsFillMoonStarsFill, BsFillSunFill } from 'react-icons/bs'
 import { AiFillTwitterCircle, AiFillLinkedin, AiFillYoutube } from 'react-icons/ai'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import deved from '../public/dev-luk-wave.png'
 import code from '../public/code.png'
 import design from '../public/design.png'
@@ -17,6 +17,22 @@ import web6 from '../public/web6.png'
 export default function Home() {
   const [darkMode, setDarkMode] = useState(false)
 
+  useEffect(() => {
+    if (
+      localStorage.theme === 'dark' ||
+      (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)
+    ) {
+      setDarkMode('dark')
+    } else {
+      setDarkMode(false)
+    }
+  }, [])
+
+  const handleThemeSwitch = () => {
+    setDarkMode(darkMode === 'dark' ? '' : 'dark')
+    darkMode ? (localStorage.theme = 'light') : (localStorage.theme = 'dark')
+  }
+
   return (
     <div className={darkMode ? 'dark' : ''}>
       <Head>
@@ -31,7 +47,11 @@ export default function Home() {
             <h1 className="text-xl font-burtons">developedbyluks</h1>
             <ul className="flex items-center">
               <li>
-                <BsFillMoonStarsFill onClick={() => setDarkMode(!darkMode)} className=" cursor-pointer text-2xl" />
+                {darkMode ? (
+                  <BsFillSunFill onClick={handleThemeSwitch} className="cursor-pointer text-2xl" />
+                ) : (
+                  <BsFillMoonStarsFill onClick={handleThemeSwitch} className="cursor-pointer text-2xl" />
+                )}
               </li>
               <li>
                 <a
